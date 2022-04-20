@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-table
-                :data="employec"
+                :data="employEc"
                 stripe
                 border
                 style="width: 70%">
@@ -46,7 +46,7 @@
         name: "PerEc",
         data() {
             return {
-                employec: []
+                employEc: []
             }
         },
         mounted() {
@@ -56,7 +56,7 @@
             initEmployEc() {
                 this.getRequest('/personnel/ec/').then(resp => {
                     if (resp) {
-                        this.employec = resp
+                        this.employEc = resp
                     }
                 })
             }
