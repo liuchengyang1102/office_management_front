@@ -25,6 +25,7 @@ module.exports = {
     devServer: {
         host: 'localhost',
         port: 8080,
-        proxy: proxyObj // 代理
+        proxy: proxyObj, // 代理
+        disableHostCheck: true
     }
 }
