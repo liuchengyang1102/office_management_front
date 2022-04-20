@@ -335,11 +335,13 @@
                 <el-table-column
                         label="操作"
                         fixed="right"
-                        width="200">
+                        width="180">
                     <template slot-scope="scope">
                         <!-- 25-4 给编辑按钮绑定点击事件 @click="showEmpView(scope.row)" -->
                         <el-button style="padding: 3px;" size="mini" @click="showEmpView(scope.row)">编辑</el-button>
-                        <el-button style="padding: 3px;" size="mini" type="primary" plain>查看高级资料</el-button>
+                        <el-button style="padding: 3px;" size="mini" type="primary" @click="showEmpEcView(scope.row)">
+                            员工奖惩
+                        </el-button>
                         <!-- 24-1 删除员工 @click="deleteEmp(scope.row)" -->
                         <el-button style="padding: 3px;" size="mini" type="danger" @click="deleteEmp(scope.row)">删除
                         </el-button>
@@ -626,6 +628,53 @@
         <el-button type="primary" @click="doAddEmp">确 定</el-button>
       </span>
         </el-dialog>
+        <el-dialog
+                title="员工奖惩"
+                :visible.sync="dialogVisible1"
+                width="30%"
+                :before-close="handleClose1">
+            <table class="employec">
+                <tr>
+                    <td>
+                        <el-tag>奖罚原因</el-tag>
+                    </td>
+                    <td>
+                        <el-input v-model="employeeEc.ecReason" size="small"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <el-tag>奖罚分</el-tag>
+                    </td>
+                    <td>
+                        <el-input v-model="employeeEc.ecPoint" size="small"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <el-tag>类别</el-tag>
+                    </td>
+                    <td>
+                        <el-radio-group v-model="employeeEc.ecType">
+                            <el-radio label="0">奖</el-radio>
+                            <el-radio label="1">罚</el-radio>
+                        </el-radio-group>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <el-tag>备注</el-tag>
+                    </td>
+                    <td>
+                        <el-input v-model="employeeEc.remark" size="small"/>
+                    </td>
+                </tr>
+            </table>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible1 = false">取 消</el-button>
+            <el-button type="primary" @click="addEmployeeEc">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -658,6 +707,15 @@
                 size: 10, // 15、默认每页显示 10 条
                 empName: '', // 18、搜索
                 dialogVisible: false, // 23-2、添加员工弹框
+                dialogVisible1: false,//员工奖惩弹框
+                employeeEc: { // 员工奖惩
+                    eid: null,
+                    ecReason: '',
+                    ecPoint: null,
+                    ecType: '',
+                    remark: '',
+                    ecDate: ''
+                },
                 nations: [],   // 23-7 添加员工 民族
                 joblevels: [], // 23-7 职称
                 politicsstatus: [], // 23-7 政治面貌
@@ -756,6 +814,28 @@
             this.initPositions() // 23-12 获取职位
         },
         methods: {
+            //添加员工奖惩
+            addEmployeeEc() {
+                this.employeeEc.ecDate = new Date()
+                this.postRequest('/personnel/ec/', this.employeeEc).then(resp => {
+                    if (resp) {
+                        this.dialogVisible1 = false
+                    }
+                })
+            },
+            //员工奖惩弹出框
+            showEmpEcView(data) {
+                this.employeeEc.eid = data.id
+                this.employeeEc.ecReason = ''
+                this.employeeEc.ecPoint = null
+                this.employeeEc.ecType = ''
+                this.employeeEc.remark = ''
+                this.dialogVisible1 = true
+            },
+            //员工奖惩对话框关闭
+            handleClose1() {
+                this.dialogVisible1 = false
+            },
             //添加员工对话框关闭
             handleClose() {
                 this.dialogVisible = false
@@ -1057,5 +1137,12 @@
     {
         transform: translateX(10px);
         opacity: 0;
+    }
+
+    .employec tr {
+        width: 140%;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 3px;
     }
 </style>
