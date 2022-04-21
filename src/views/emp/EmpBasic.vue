@@ -755,6 +755,7 @@
                     workAge: null,
                     salaryId: null
                 },
+                oldDepartmentId: null,
                 visible: false, // 23-18 弹出框
                 visible2: false, // 30-5 高级搜索 部门
                 // 23-21 树形控件
@@ -886,6 +887,7 @@
                 this.emp = data // 回显数据
                 this.inputDepName = data.department.name // 25-7 回显部门信息
                 this.initPositions() // 25-9 初始化职位信息
+                this.oldDepartmentId = data.departmentId//将员工原来的部门id保存一下，方便判断员工是否有调动
                 this.dialogVisible = true
             },
             // 24-2 删除员工
@@ -921,6 +923,10 @@
                                     this.initEmps()
                                 }
                             })
+                            if (this.emp.departmentId != this.oldDepartmentId) {
+                                this.postRequest('/personnel/remove/', this.emp).then(resp => {
+                                })
+                            }
                         }
                     })
                 } else {
