@@ -1073,13 +1073,20 @@
             // 15、分页 每页显示多少条 默认会把 size 传进来
             sizeChange(size) {
                 this.size = size
-                this.initEmps()
+                if(this.showAdvanceSearchVisible){
+                    this.initEmps('advanced')
+                }else {
+                    this.initEmps()
+                }
             },
             // 13、分页-当前页-currentPage 点击的时候自己会带过来
             currentChange(currentPage) {
                 this.currentPage = currentPage // 16
-                this.initEmps() // 18、调用方法
-
+                if(this.showAdvanceSearchVisible){
+                    this.initEmps('advanced')
+                }else {
+                    this.initEmps()
+                }
             },
             // 4、获取所有员工（分页）
             initEmps(type) {
